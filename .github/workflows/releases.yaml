@@ -22,19 +22,14 @@ jobs:
       - name: Extract major version
         run: |
           release_tag=${{ github.event.release.tag_name }}
-          if [ -z "$release_tag" ]; then
-            echo "Latest tag does not exist"
-            echo "Cannot continue, exiting..."
-            exit 1
-          fi
-
-          major_version=$(echo $latest_tag | awk -F'.' '{ print $1 }')
+          major_version=$(echo $release_tag | awk -F'.' '{ print $1 }')
           if [ ! "$major_version" =~ ^v[0-9]+$ ]; then
-            echo "Latest tag does not follow Semantic Versioning"
+            echo "Release tag does not follow Semantic Versioning"
             echo "Cannot continue, exiting..."
             exit 1
           fi
 
+          echo "Successfully extracted major version '$major_version'"
           echo "major_version=$major_version" >> $GITHUB_ENV
 
       - name: Update Git tag
