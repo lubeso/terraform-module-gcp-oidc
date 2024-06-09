@@ -14,6 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # Check out branch (not just the commit)
+          ref: refs/heads/${{ github.event.release.target_commitish }}
           fetch-depth: 0  # Fetch entire Git history
 
       - name: Extract major version
@@ -38,4 +40,4 @@ jobs:
         run: git tag -f ${{ env.major_version }} ${{ github.event.release.tag_name }}
 
       - name: Push changes
-        run: git push origin ${{ env.major_version }} --force --follow-tags
+        run: git push --force --follow-tags
