@@ -16,7 +16,7 @@ resource "google_iam_workload_identity_pool_provider" "default" {
   disabled     = var.workload_identity_pool_provider.disabled
   attribute_mapping = merge(
     { "google.subject" = "assertion.sub" },
-    coalesce(var.workload_identity_pool_provider.attribute_mapping, {}),
+    var.workload_identity_pool_provider.attribute_mapping,
   )
   attribute_condition = var.workload_identity_pool_provider.attribute_condition
   oidc {

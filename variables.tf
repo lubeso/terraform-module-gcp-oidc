@@ -20,7 +20,7 @@ variable "workload_identity_pool_provider" {
     display_name        = optional(string, "OpenID Connect")
     description         = optional(string)
     disabled            = optional(bool, false)
-    attribute_mapping   = optional(map(string))
+    attribute_mapping   = optional(map(string), {})
     attribute_condition = optional(string)
     oidc = object({
       issuer_uri        = string
