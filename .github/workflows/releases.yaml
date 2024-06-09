@@ -33,7 +33,7 @@ jobs:
           echo "major_version=$major_version" >> $GITHUB_ENV
 
       - name: Update Git tag
-        run: git tag -af ${{ env.major_version }} ${{ github.event.release.tag_name }} -m ${{ env.major_version }}
+        run: git tag -f ${{ env.major_version }} ${{ github.event.release.tag_name }}
 
       - name: Push changes
         run: git push ${{ env.major_version }} --force --follow-tags
