@@ -1,0 +1,41 @@
+name: Releases
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  update-major-version-tag:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          depth: 0  # Fetch entire Git history
+
+      - name: Extract major version
+        run: |
+          release_tag=${{ github.event.release.tag_name }}
+          if [ -z "$major_version" ]; then
+            echo "Latest tag does not exist"
+            echo "Cannot continue, exiting..."
+            exit 1
+          fi
+
+          major_version=$(echo $latest_tag | awk -F'.' '{ print $1 }')
+          if [ ! "$major_version" =~ ^v[0-9]+$ ]; then
+            echo "Latest tag does not follow Semantic Versioning"
+            echo "Cannot continue, exiting..."
+            exit 1
+          fi
+
+          echo "major_version=$major_version" >> $GITHUB_ENV
+
+      - name: Update Git tag
+        run: git tag -f ${{ env.major_version }} ${{ github.event.release.tag_name }}
+
+      - name: Push changes
+        run: git push origin --force --follow-tags
